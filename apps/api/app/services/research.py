@@ -72,7 +72,7 @@ def _build_brief(
     web_results: list[dict[str, str]],
 ) -> str:
     lines = [
-        f"# Research brief",
+        "# Research brief",
         f"**Question:** {question}",
         "",
         "## Document evidence (RAG)",

@@ -5,6 +5,7 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 def _resolve_env_files() -> tuple[str, ...]:
     """Prefer monorepo root `.env`, then `apps/api/.env`, then cwd `.env`."""
     here = Path(__file__).resolve()

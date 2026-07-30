@@ -14,10 +14,10 @@ from app.services import documents as document_service
 from app.services import knowledge_graph as kg
 from app.services import meetings as meeting_service
 from app.services import memory as memory_service
+from app.services import prompts as prompt_service
 from app.services import research as research_service
 from app.services import sql_assistant
 from app.services.tracing import TraceRecorder
-from app.services import prompts as prompt_service
 
 
 class AgentState(TypedDict, total=False):
@@ -111,7 +111,7 @@ def _run_meeting_agent(db: Session, user: User, task: str) -> dict[str, Any]:
 
 def _run_report_agent(task: str, steps: list[dict[str, Any]]) -> str:
     """Build an executive report from specialist evidence (prefer facts over free LLM prose)."""
-    lines: list[str] = [f"## Agent report", f"**Task:** {task}", ""]
+    lines: list[str] = ["## Agent report", f"**Task:** {task}", ""]
 
     sql_steps = [s for s in steps if s.get("agent") == "sql"]
     rag_steps = [s for s in steps if s.get("agent") in {"rag", "retrieval"}]
