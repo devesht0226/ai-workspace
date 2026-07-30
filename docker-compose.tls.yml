@@ -1,0 +1,9 @@
+# Optional TLS overlay — requires certs from scripts/generate-tls.sh
+services:
+  nginx:
+    volumes:
+      - ./deploy/nginx/nginx.tls.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/certs:/etc/nginx/certs:ro
+    ports:
+      - "80:80"
+      - "443:443"
