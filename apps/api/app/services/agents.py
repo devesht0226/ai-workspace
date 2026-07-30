@@ -169,9 +169,7 @@ def _run_report_agent(task: str, steps: list[dict[str, Any]]) -> str:
                 "see the query and result above."
             )
         else:
-            lines.append(
-                f"Completed {len(steps)} orchestration steps for this task."
-            )
+            lines.append(f"Completed {len(steps)} orchestration steps for this task.")
         return "\n".join(lines).strip()
 
     llm = get_llm_provider()
@@ -260,9 +258,7 @@ def _build_graph():
         return None
 
 
-def run_agents(
-    db: Session, user: User, task: str, *, model_family: str | None = None
-) -> AgentRun:
+def run_agents(db: Session, user: User, task: str, *, model_family: str | None = None) -> AgentRun:
     run = AgentRun(user_id=user.id, task=task, status=JobStatus.processing)
     db.add(run)
     db.commit()
@@ -297,9 +293,7 @@ def run_agents(
                 result = _run_retrieval_agent(db, user, task)
                 steps.append(result)
             elif agent_name == "research":
-                result = research_service.run_research(
-                    db, user, task, model_family=model_family
-                )
+                result = research_service.run_research(db, user, task, model_family=model_family)
                 steps.append(result)
             elif agent_name == "code":
                 result = _run_code_agent(task)

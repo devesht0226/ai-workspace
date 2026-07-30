@@ -31,11 +31,7 @@ def list_runs(db: DbSession, user: CurrentUser) -> list[AgentRunOut]:
 
 @router.post("/runs", response_model=AgentRunOut, status_code=201)
 def run_agents(payload: AgentRunRequest, db: DbSession, user: CurrentUser) -> AgentRunOut:
-    return _out(
-        agent_service.run_agents(
-            db, user, payload.task, model_family=payload.model_family
-        )
-    )
+    return _out(agent_service.run_agents(db, user, payload.task, model_family=payload.model_family))
 
 
 @router.get("/runs/{run_id}", response_model=AgentRunOut)

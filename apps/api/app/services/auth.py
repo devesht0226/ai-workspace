@@ -330,9 +330,7 @@ def export_account_data(db: Session, user: User) -> dict:
     for chat in chats:
         messages = list(
             db.scalars(
-                select(Message)
-                .where(Message.session_id == chat.id)
-                .order_by(Message.created_at)
+                select(Message).where(Message.session_id == chat.id).order_by(Message.created_at)
             ).all()
         )
         chat_payload.append(

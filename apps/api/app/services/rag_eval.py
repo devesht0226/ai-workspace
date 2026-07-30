@@ -198,7 +198,9 @@ def list_evals(db: Session, user: User, *, limit: int = 50) -> list[RagEvalRun]:
 
 
 def get_eval(db: Session, user: User, eval_id) -> RagEvalRun:
-    row = db.scalar(select(RagEvalRun).where(RagEvalRun.id == eval_id, RagEvalRun.user_id == user.id))
+    row = db.scalar(
+        select(RagEvalRun).where(RagEvalRun.id == eval_id, RagEvalRun.user_id == user.id)
+    )
     if row is None:
         from app.core.exceptions import NotFoundError
 

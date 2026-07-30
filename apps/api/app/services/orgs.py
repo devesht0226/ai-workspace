@@ -100,7 +100,9 @@ def add_member(db: Session, user: User, org_id: UUID, *, email: str, role: str =
 def list_members(db: Session, user: User, org_id: UUID) -> list[dict]:
     _require_member(db, user, org_id)
     rows = list(
-        db.scalars(select(OrganizationMember).where(OrganizationMember.organization_id == org_id)).all()
+        db.scalars(
+            select(OrganizationMember).where(OrganizationMember.organization_id == org_id)
+        ).all()
     )
     out = []
     for m in rows:
@@ -130,7 +132,9 @@ def create_team(db: Session, user: User, org_id: UUID, *, name: str) -> Team:
 def list_teams(db: Session, user: User, org_id: UUID) -> list[dict]:
     _require_member(db, user, org_id)
     teams = list(db.scalars(select(Team).where(Team.organization_id == org_id)).all())
-    return [{"id": str(t.id), "name": t.name, "organization_id": str(t.organization_id)} for t in teams]
+    return [
+        {"id": str(t.id), "name": t.name, "organization_id": str(t.organization_id)} for t in teams
+    ]
 
 
 def add_team_member(db: Session, user: User, team_id: UUID, *, email: str) -> dict:

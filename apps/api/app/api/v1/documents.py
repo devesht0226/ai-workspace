@@ -28,7 +28,10 @@ def list_documents(
     user: CurrentUser,
     collection_id: UUID | None = Query(default=None),
 ) -> list[DocumentOut]:
-    return [_document_out(d) for d in document_service.list_documents(db, user, collection_id=collection_id)]
+    return [
+        _document_out(d)
+        for d in document_service.list_documents(db, user, collection_id=collection_id)
+    ]
 
 
 @router.post("/document-collections", response_model=DocumentCollectionOut, status_code=201)

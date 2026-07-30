@@ -68,9 +68,7 @@ def password_reset_request(payload: PasswordResetRequest, db: DbSession) -> dict
 
 @router.post("/auth/password-reset/confirm", response_model=UserPublic)
 def password_reset_confirm(payload: PasswordResetConfirm, db: DbSession) -> UserPublic:
-    user = auth_service.reset_password(
-        db, token=payload.token, new_password=payload.new_password
-    )
+    user = auth_service.reset_password(db, token=payload.token, new_password=payload.new_password)
     return auth_service.to_public(user)
 
 

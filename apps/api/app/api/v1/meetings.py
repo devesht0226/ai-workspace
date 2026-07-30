@@ -29,9 +29,7 @@ def _out(row) -> MeetingOut:
 
 
 @router.get("", response_model=list[MeetingOut])
-def list_meetings(
-    db: DbSession, user: CurrentUser, q: str | None = None
-) -> list[MeetingOut]:
+def list_meetings(db: DbSession, user: CurrentUser, q: str | None = None) -> list[MeetingOut]:
     rows = (
         meeting_service.search_meetings(db, user, q)
         if q is not None

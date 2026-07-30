@@ -58,7 +58,5 @@ def create_team(org_id: UUID, payload: TeamCreate, db: DbSession, user: CurrentU
 
 
 @router.post("/teams/{team_id}/members")
-def add_team_member(
-    team_id: UUID, payload: MemberInvite, db: DbSession, user: CurrentUser
-) -> dict:
+def add_team_member(team_id: UUID, payload: MemberInvite, db: DbSession, user: CurrentUser) -> dict:
     return org_service.add_team_member(db, user, team_id, email=payload.email)

@@ -59,7 +59,9 @@ def _decisions_from_text(text: str) -> list[str]:
 
 def _follow_up_email(summary: str, actions: list[dict], decisions: list[str]) -> str:
     action_text = "\n".join(f"- {item.get('text', '')}" for item in actions)
-    decision_text = "\n".join(f"- {decision}" for decision in decisions) or "- No decisions captured."
+    decision_text = (
+        "\n".join(f"- {decision}" for decision in decisions) or "- No decisions captured."
+    )
     settings = get_settings()
     if settings.environment == "test" or settings.llm_provider == "fake":
         return (

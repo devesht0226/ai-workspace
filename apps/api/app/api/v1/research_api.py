@@ -42,9 +42,7 @@ def export_brief(
     if format == "docx":
         return Response(
             research_service.export_brief_docx(brief),
-            media_type=(
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ),
+            media_type=("application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
             headers={"Content-Disposition": 'attachment; filename="research-brief.docx"'},
         )
     return PlainTextResponse(

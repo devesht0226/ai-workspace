@@ -63,7 +63,11 @@ def init_db() -> None:
     # Best-effort ALTER for existing SQLite DBs (ignore if column exists).
     patches = [
         ("users", "avatar_url", "ALTER TABLE users ADD COLUMN avatar_url VARCHAR(500)"),
-        ("refresh_tokens", "user_agent", "ALTER TABLE refresh_tokens ADD COLUMN user_agent VARCHAR(300)"),
+        (
+            "refresh_tokens",
+            "user_agent",
+            "ALTER TABLE refresh_tokens ADD COLUMN user_agent VARCHAR(300)",
+        ),
         ("documents", "collection_id", "ALTER TABLE documents ADD COLUMN collection_id CHAR(36)"),
         ("documents", "content_hash", "ALTER TABLE documents ADD COLUMN content_hash VARCHAR(64)"),
         ("documents", "version", "ALTER TABLE documents ADD COLUMN version INTEGER DEFAULT 1"),

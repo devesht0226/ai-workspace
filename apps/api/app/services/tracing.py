@@ -19,7 +19,9 @@ def _token_estimate(text: str | None) -> int:
 
 
 class TraceRecorder:
-    def __init__(self, db: Session, user: User, request_text: str, *, model_family: str | None = None):
+    def __init__(
+        self, db: Session, user: User, request_text: str, *, model_family: str | None = None
+    ):
         self.db = db
         self.user = user
         self.started = time.perf_counter()

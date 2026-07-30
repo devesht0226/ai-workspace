@@ -59,7 +59,9 @@ def unread_count(db: Session, user: User) -> int:
 
 def mark_read(db: Session, user: User, notification_id: UUID) -> Notification:
     row = db.scalar(
-        select(Notification).where(Notification.id == notification_id, Notification.user_id == user.id)
+        select(Notification).where(
+            Notification.id == notification_id, Notification.user_id == user.id
+        )
     )
     if not row:
         raise NotFoundError("Notification not found")

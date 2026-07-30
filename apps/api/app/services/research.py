@@ -128,7 +128,9 @@ def _build_brief(
     return "\n".join(lines)
 
 
-def run_research(db: Session, user: User, question: str, *, model_family: str | None = None) -> dict:
+def run_research(
+    db: Session, user: User, question: str, *, model_family: str | None = None
+) -> dict:
     rag_payload = _empty_rag()
     try:
         rag = document_service.query_documents(db, user, question=question, top_k=4)

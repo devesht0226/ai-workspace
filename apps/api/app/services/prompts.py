@@ -18,8 +18,7 @@ DEFAULT_PROMPTS = {
         "If the sources are insufficient, say you do not know."
     ),
     "sql_expert": (
-        "You are a SQL expert. Given the schema, write ONE SQLite SELECT query only. "
-        "No DML/DDL."
+        "You are a SQL expert. Given the schema, write ONE SQLite SELECT query only. No DML/DDL."
     ),
 }
 
@@ -72,9 +71,7 @@ def create_prompt_version(
 ) -> PromptTemplate:
     if not content.strip():
         raise ValidationAppError("Prompt content is required")
-    latest = db.scalar(
-        select(func.max(PromptTemplate.version)).where(PromptTemplate.name == name)
-    )
+    latest = db.scalar(select(func.max(PromptTemplate.version)).where(PromptTemplate.name == name))
     version = int(latest or 0) + 1
     # deactivate previous
     for old in db.scalars(select(PromptTemplate).where(PromptTemplate.name == name)).all():

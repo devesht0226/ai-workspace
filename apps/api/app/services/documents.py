@@ -29,9 +29,7 @@ def _ensure_upload_dir() -> Path:
     return path
 
 
-def list_documents(
-    db: Session, user: User, *, collection_id: UUID | None = None
-) -> list[Document]:
+def list_documents(db: Session, user: User, *, collection_id: UUID | None = None) -> list[Document]:
     stmt = select(Document).where(Document.user_id == user.id).order_by(Document.created_at.desc())
     if collection_id:
         _get_collection(db, user, collection_id)
@@ -476,9 +474,7 @@ def ingest_pdf(
     db: Session, user: User, *, filename: str, content_type: str, data: bytes
 ) -> Document:
     """Backward-compatible entry point for PDF callers."""
-    return ingest_document(
-        db, user, filename=filename, content_type=content_type, data=data
-    )
+    return ingest_document(db, user, filename=filename, content_type=content_type, data=data)
 
 
 def delete_document(db: Session, user: User, document_id: UUID) -> None:
@@ -536,9 +532,7 @@ def query_documents(
             if scores[i] > 0
         ][: max(top_k * 3, top_k)]
         vector_order = [
-            str(payload.get("chunk_id"))
-            for payload, _ in vector_hits
-            if payload.get("chunk_id")
+            str(payload.get("chunk_id")) for payload, _ in vector_hits if payload.get("chunk_id")
         ]
         fused_ids = rrf_fuse(vector_order, bm25_order, top_k=max(top_k * 3, top_k))
         id_to_chunk = {str(c.id): c for c in all_chunks}
@@ -616,8 +610,7 @@ def query_documents(
             "If the sources are insufficient, say you do not know."
         )
     prompt = (
-        f"{system_prompt}\n\n"
-        f"SOURCES:\n\n{chr(10).join(context_blocks)}\n\nQUESTION: {question}"
+        f"{system_prompt}\n\nSOURCES:\n\n{chr(10).join(context_blocks)}\n\nQUESTION: {question}"
     )
     llm = get_llm_provider()
     answer = llm.chat([ChatMessage(role="user", content=prompt)])
@@ -647,6 +640,4 @@ def query_documents(
         )
     )
     db.commit()
-    return RAGQueryResponse(
-        answer=answer, citations=citations, eval_metrics=eval_row.metrics_json
-    )
+    return RAGQueryResponse(answer=answer, citations=citations, eval_metrics=eval_row.metrics_json)
