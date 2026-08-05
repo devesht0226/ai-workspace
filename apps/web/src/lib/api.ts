@@ -313,6 +313,13 @@ export const api = {
         if (payload.event === "token" && typeof payload.data === "string") {
           onToken(payload.data);
         }
+        if (payload.event === "error") {
+          const msg =
+            typeof payload.data === "string"
+              ? payload.data
+              : "Chat failed — check API keys on the server.";
+          throw new Error(msg);
+        }
       }
     }
   },

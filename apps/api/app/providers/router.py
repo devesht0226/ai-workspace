@@ -196,14 +196,26 @@ class ModelRouter:
     def get(self, family: str | None = None) -> tuple[str, LLMProvider]:
         key = self.resolve_family(family)
         if key == "auto":
-            for candidate in ("llama", "gpt", "mistral", "huggingface"):
+            # Prefer the configured default provider; never pick local Ollama first in cloud.
+            provider = (self.settings.llm_provider or "").lower()
+            if provider in {"openai", "gpt"}:
+                order = ("gpt", "mistral", "huggingface", "llama")
+            elif provider in {"mistral"}:
+                order = ("mistral", "gpt", "huggingface", "llama")
+            elif provider in {"huggingface", "hf"}:
+                order = ("huggingface", "gpt", "mistral", "llama")
+            else:
+                # Local / ollama-first demos
+                order = ("llama", "gpt", "mistral", "huggingface")
+            for candidate in order:
                 if candidate in self._backends:
                     return candidate, self._backends[candidate]
         backend = self._backends.get(key)
         if backend is None:
-            # Fall back to llama/ollama or fake
-            if "llama" in self._backends:
-                return "llama", self._backends["llama"]
+            # Fall back to any configured cloud provider before local Ollama
+            for candidate in ("gpt", "mistral", "huggingface", "llama"):
+                if candidate in self._backends:
+                    return candidate, self._backends[candidate]
             raise ValidationAppError(
                 f"Model family '{key}' is not configured. Set API keys or use llama/ollama."
             )
@@ -218,7 +230,16 @@ class ModelRouter:
     ) -> dict:
         if self.resolve_family(family) == "auto":
             errors: list[str] = []
-            for candidate in ("llama", "gpt", "mistral", "huggingface"):
+            provider = (self.settings.llm_provider or "").lower()
+            if provider in {"openai", "gpt"}:
+                order = ("gpt", "mistral", "huggingface", "llama")
+            elif provider in {"mistral"}:
+                order = ("mistral", "gpt", "huggingface", "llama")
+            elif provider in {"huggingface", "hf"}:
+                order = ("huggingface", "gpt", "mistral", "llama")
+            else:
+                order = ("llama", "gpt", "mistral", "huggingface")
+            for candidate in order:
                 backend = self._backends.get(candidate)
                 if backend is None:
                     continue

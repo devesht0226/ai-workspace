@@ -15,6 +15,37 @@ from app.models import ChatSession, Message, MessageRole, UsageEvent, User
 from app.providers.llm import ChatMessage, get_llm_provider
 
 
+def _default_chat_model() -> tuple[str, str]:
+    """Return (provider, model_name) for new chat sessions."""
+    settings = get_settings()
+    provider = (settings.llm_provider or "ollama").lower()
+    if provider in {"openai", "gpt"} and settings.openai_api_key:
+        return "openai", settings.openai_chat_model
+    if provider == "mistral" and settings.mistral_api_key:
+        return "mistral", settings.mistral_chat_model
+    if provider in {"huggingface", "hf"} and settings.huggingface_api_key:
+        return "huggingface", settings.huggingface_model
+    if settings.openai_api_key and provider != "ollama":
+        return "openai", settings.openai_chat_model
+    return settings.llm_provider, settings.ollama_chat_model
+
+
+def _chat_model_for_session(session: ChatSession) -> str | None:
+    """Avoid sending local Ollama model names to cloud providers."""
+    settings = get_settings()
+    name = (session.model_name or "").strip()
+    provider = (session.provider or settings.llm_provider or "").lower()
+    if provider in {"openai", "gpt"}:
+        if not name or name == settings.ollama_chat_model:
+            return settings.openai_chat_model
+        return name
+    if provider == "mistral":
+        if not name or name == settings.ollama_chat_model:
+            return settings.mistral_chat_model
+        return name
+    return name or None
+
+
 def list_sessions(db: Session, user: User) -> list[ChatSession]:
     stmt = (
         select(ChatSession)
@@ -25,12 +56,12 @@ def list_sessions(db: Session, user: User) -> list[ChatSession]:
 
 
 def create_session(db: Session, user: User, *, title: str | None = None) -> ChatSession:
-    settings = get_settings()
+    provider, model_name = _default_chat_model()
     session = ChatSession(
         user_id=user.id,
         title=title or "New chat",
-        model_name=settings.ollama_chat_model,
-        provider=settings.llm_provider,
+        model_name=model_name,
+        provider=provider,
     )
     db.add(session)
     db.commit()
@@ -104,7 +135,7 @@ def send_message_sync(
     llm = get_llm_provider()
     mem = _memory_snippet(db, user, content)
     history = _history_as_messages(session, memory_context=mem)
-    reply = llm.chat(history, model=session.model_name)
+    reply = llm.chat(history, model=_chat_model_for_session(session))
 
     assistant = Message(
         session_id=session.id,
@@ -146,7 +177,7 @@ def stream_message(db: Session, user: User, session_id: UUID, content: str) -> I
     history = _history_as_messages(session, memory_context=mem)
     chunks: list[str] = []
     try:
-        for token in llm.stream_chat(history, model=session.model_name):
+        for token in llm.stream_chat(history, model=_chat_model_for_session(session)):
             chunks.append(token)
             yield json.dumps({"event": "token", "data": token})
         full = "".join(chunks).strip()
@@ -193,7 +224,7 @@ async def astream_message(
     history = _history_as_messages(session, memory_context=mem)
     chunks: list[str] = []
     try:
-        async for token in llm.astream_chat(history, model=session.model_name):
+        async for token in llm.astream_chat(history, model=_chat_model_for_session(session)):
             chunks.append(token)
             yield json.dumps({"event": "token", "data": token})
         full = "".join(chunks).strip()
