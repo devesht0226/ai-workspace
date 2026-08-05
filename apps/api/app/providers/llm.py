@@ -205,7 +205,9 @@ def get_llm_provider(family: str | None = None) -> LLMProvider:
         return FakeLLM()
     from app.providers.router import get_model_router
 
-    _, backend = get_model_router().get(family)
+    # Honor LLM_PROVIDER when callers don't pass an explicit family (chat path).
+    preferred = family if family is not None else settings.llm_provider or "auto"
+    _, backend = get_model_router().get(preferred)
     return backend
 
 

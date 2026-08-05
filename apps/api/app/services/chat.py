@@ -33,17 +33,40 @@ def _default_chat_model() -> tuple[str, str]:
 def _chat_model_for_session(session: ChatSession) -> str | None:
     """Avoid sending local Ollama model names to cloud providers."""
     settings = get_settings()
+    provider = (settings.llm_provider or session.provider or "").lower()
     name = (session.model_name or "").strip()
-    provider = (session.provider or settings.llm_provider or "").lower()
+
+    # Cloud OpenAI mode: always use the configured OpenAI model (ignore tinyllama sessions)
+    if settings.openai_api_key and provider in {"openai", "gpt"}:
+        return settings.openai_chat_model
+    if settings.mistral_api_key and provider == "mistral":
+        return settings.mistral_chat_model
+    if settings.openai_api_key and name in {
+        "",
+        settings.ollama_chat_model,
+        "tinyllama",
+        "llama3.2",
+    }:
+        # Old sessions saved as ollama/tinyllama — still use OpenAI when key exists
+        return settings.openai_chat_model
     if provider in {"openai", "gpt"}:
-        if not name or name == settings.ollama_chat_model:
-            return settings.openai_chat_model
-        return name
+        return name or settings.openai_chat_model
     if provider == "mistral":
-        if not name or name == settings.ollama_chat_model:
-            return settings.mistral_chat_model
-        return name
+        return name or settings.mistral_chat_model
     return name or None
+
+
+def _llm_for_chat(session: ChatSession):
+    """Pick the right backend for this deployment."""
+    settings = get_settings()
+    provider = (settings.llm_provider or "").lower()
+    if settings.openai_api_key and provider in {"openai", "gpt"}:
+        return get_llm_provider("gpt")
+    if settings.mistral_api_key and provider == "mistral":
+        return get_llm_provider("mistral")
+    if settings.openai_api_key:
+        return get_llm_provider("gpt")
+    return get_llm_provider(session.provider or provider or "auto")
 
 
 def list_sessions(db: Session, user: User) -> list[ChatSession]:
@@ -132,7 +155,7 @@ def send_message_sync(
     db.commit()
     db.refresh(session)
 
-    llm = get_llm_provider()
+    llm = _llm_for_chat(session)
     mem = _memory_snippet(db, user, content)
     history = _history_as_messages(session, memory_context=mem)
     reply = llm.chat(history, model=_chat_model_for_session(session))
@@ -172,7 +195,7 @@ def stream_message(db: Session, user: User, session_id: UUID, content: str) -> I
     db.commit()
     db.refresh(session)
 
-    llm = get_llm_provider()
+    llm = _llm_for_chat(session)
     mem = _memory_snippet(db, user, content)
     history = _history_as_messages(session, memory_context=mem)
     chunks: list[str] = []
@@ -219,7 +242,7 @@ async def astream_message(
     db.commit()
     db.refresh(session)
 
-    llm = get_llm_provider()
+    llm = _llm_for_chat(session)
     mem = _memory_snippet(db, user, content)
     history = _history_as_messages(session, memory_context=mem)
     chunks: list[str] = []
