@@ -1,13 +1,17 @@
 # AI Workspace
 
+[![CI](https://github.com/devesht0226/ai-workspace/actions/workflows/ci.yml/badge.svg)](https://github.com/devesht0226/ai-workspace/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 **An enterprise-style AI knowledge platform you can run on a laptop.**
 
 One signed-in product that combines chat, document Q&A (RAG), SQL, code review, resume analysis, meeting notes, multi-agent orchestration, research, evaluation, and admin — built as a portfolio-grade full-stack system (Next.js + FastAPI).
 
 | | |
 |---|---|
-| **Web** | http://localhost:3000 |
+| **Local web** | http://localhost:3000 |
 | **API docs** | http://127.0.0.1:8000/docs |
+| **Live demo** | _Deploy with [docs/DEPLOY_CLOUD.md](docs/DEPLOY_CLOUD.md) — then paste your Vercel URL here_ |
 | **Status** | **v1.0.0** complete — demo-ready on Windows with SQLite + Ollama |
 | **License** | MIT |
 | **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
@@ -46,7 +50,22 @@ It is **not** a single chatbot demo. It is one authenticated workspace with:
 | Eval / Traces / Benchmark | `/eval`, `/observability`, `/benchmark` | Quality & observability |
 | Settings / Admin | `/settings`, `/admin` | Profile, GDPR, user admin |
 
-**10-minute walkthrough:** [docs/DEMO.md](docs/DEMO.md)
+**10-minute walkthrough:** [docs/DEMO.md](docs/DEMO.md) · **Video script:** [docs/DEMO_VIDEO.md](docs/DEMO_VIDEO.md)
+
+---
+
+## Screenshots
+
+Capture UI images into [`docs/screenshots/`](docs/screenshots/README.md), then uncomment:
+
+<!--
+![Home](docs/screenshots/01-home.png)
+![Dashboard](docs/screenshots/02-dashboard.png)
+![Chat](docs/screenshots/03-chat.png)
+![RAG](docs/screenshots/04-rag.png)
+![SQL](docs/screenshots/05-sql.png)
+![Agents](docs/screenshots/06-agents.png)
+-->
 
 ---
 
@@ -85,6 +104,17 @@ Full install notes: [docs/INSTALL.md](docs/INSTALL.md)
 
 ---
 
+## Deploy (public demo)
+
+| Layer | Host | Guide |
+|-------|------|--------|
+| Web | **Vercel** (`apps/web`) | [docs/DEPLOY_CLOUD.md](docs/DEPLOY_CLOUD.md) |
+| API + DB | **Render** Blueprint or **Railway** | `render.yaml` / `railway.toml` |
+
+Cloud demos should use **OpenAI or Mistral** (Ollama does not run on Vercel/Render free tiers).
+
+---
+
 ## Architecture (simple view)
 
 ```text
@@ -113,6 +143,8 @@ Deeper design: [docs/architecture/SYSTEM.md](docs/architecture/SYSTEM.md) · ADR
 | Doc | Purpose |
 |-----|---------|
 | [DEMO.md](docs/DEMO.md) | Interview / portfolio walkthrough |
+| [DEMO_VIDEO.md](docs/DEMO_VIDEO.md) | 2–3 min recording script |
+| [DEPLOY_CLOUD.md](docs/DEPLOY_CLOUD.md) | Vercel + Render/Railway |
 | [JOURNEY.md](docs/JOURNEY.md) | How the project was built start → now |
 | [FINAL_CHECKLIST.md](docs/FINAL_CHECKLIST.md) | v1.0 completion status |
 | [USER_GUIDE.md](docs/USER_GUIDE.md) | How to use each screen |

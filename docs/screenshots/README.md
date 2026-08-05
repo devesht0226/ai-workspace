@@ -13,16 +13,27 @@ Add image files here, then link them from the root `README.md`.
 | `05-sql.png` | SQL result `total_revenue = 2499` | Safe NL→SQL |
 | `06-agents.png` | Agent steps including SQL preview | Multi-agent orchestration |
 
-## Tips
+## How to capture (Windows)
 
-- Use a wide browser window (1280px+).
-- Sign in first; fill a bit of demo data (one PDF, one chat, one SQL run).
-- Prefer PNG or WebP.
-- After adding files, insert into README under a **Screenshots** heading:
+1. Start API + web (`docs/INSTALL.md`).
+2. Sign in; seed demo data (one PDF, one chat, one SQL run).
+3. Use a wide window (1280px+).
+4. `Win+Shift+S` → capture region → paste into Paint → save as PNG with the names above.
+5. Or browser DevTools → Ctrl+Shift+P → “Capture full size screenshot”.
+
+## After adding files
+
+Uncomment the Screenshots section in the root `README.md`:
 
 ```markdown
 ## Screenshots
 
 ![Dashboard](docs/screenshots/02-dashboard.png)
 ![RAG with citations](docs/screenshots/04-rag.png)
+![SQL assistant](docs/screenshots/05-sql.png)
 ```
+
+## Related
+
+- Walkthrough: [docs/DEMO.md](../DEMO.md)
+- Video script: [docs/DEMO_VIDEO.md](../DEMO_VIDEO.md)

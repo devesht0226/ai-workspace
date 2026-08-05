@@ -6,13 +6,15 @@ Start here depending on who you are:
 |----------|-----------|
 | Visiting the GitHub repo | [../README.md](../README.md) |
 | Running a 10-minute demo | [DEMO.md](./DEMO.md) |
+| Recording a demo video | [DEMO_VIDEO.md](./DEMO_VIDEO.md) |
 | Checking v1.0 completeness | [FINAL_CHECKLIST.md](./FINAL_CHECKLIST.md) |
 | Learning how it was built | [JOURNEY.md](./JOURNEY.md) |
 | Installing locally | [INSTALL.md](./INSTALL.md) |
 | Using the product screens | [USER_GUIDE.md](./USER_GUIDE.md) |
 | Changing the code | [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) |
 | Writing a resume / interview | [RESUME_BULLETS.md](./RESUME_BULLETS.md) |
-| Deploying publicly | [PRODUCTION.md](./PRODUCTION.md) |
+| Deploying to Vercel + Render | [DEPLOY_CLOUD.md](./DEPLOY_CLOUD.md) |
+| Production notes | [PRODUCTION.md](./PRODUCTION.md) |
 
 ## Product & architecture
 

@@ -18,9 +18,10 @@ This project now includes the features and operational pieces expected of a seri
 
 | Item | Why |
 |------|-----|
-| Public internet demo URL | Needs your cloud account / DNS |
+| Public internet demo URL | Needs your cloud account — follow [DEPLOY_CLOUD.md](DEPLOY_CLOUD.md) |
 | Real Let’s Encrypt certs | Needs a public domain |
 | Managed SMTP (SendGrid etc.) | Needs API keys |
 | System Tesseract install | Optional OS package for full OCR |
+| OpenAI / Mistral for cloud demo | Needs API keys (Ollama stays local) |
 
-Configure those when you deploy; the hooks are already in code.
+Configure those when you deploy; the hooks and templates are already in the repo (`render.yaml`, `railway.toml`, `apps/web/vercel.json`).

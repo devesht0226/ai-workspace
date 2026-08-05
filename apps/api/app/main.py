@@ -46,23 +46,15 @@ app.add_middleware(RequestContextMiddleware)
 app.add_middleware(RateLimitMiddleware)
 
 _cors_origins = settings.cors_origins_list
-# In development, also allow any private LAN origin (e.g. http://192.168.x.x:3000)
 _cors_kwargs: dict = {
     "allow_credentials": True,
     "allow_methods": ["*"],
     "allow_headers": ["*"],
 }
-_cors_regex = None
-if settings.environment == "development":
-    # Allow localhost + private LAN origins used when opening the UI by IP
-    _cors_regex = (
-        r"https?://(localhost|127\.0\.0\.1|192\.168\.\d{1,3}\.\d{1,3}|"
-        r"10\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?"
-    )
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
-    allow_origin_regex=_cors_regex,
+    allow_origin_regex=settings.resolved_cors_origin_regex,
     **_cors_kwargs,
 )
 

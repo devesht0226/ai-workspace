@@ -69,13 +69,13 @@ Health/ready, API metrics counter, dashboard usage/storage activity.
 Processing / agent / org-style alerts + UI.
 
 ## 16. DevOps — ✅
-Docker Compose, CI (GitHub Actions), env files, prod/TLS overlays, Postgres backup script. Public cloud deploy = ⬜ you host.
+Docker Compose, CI (GitHub Actions, Node 24–ready actions + pinned Ruff), env files, prod/TLS overlays, Postgres backup script. Cloud deploy templates: `docs/DEPLOY_CLOUD.md`, `render.yaml`, `railway.toml`, `apps/web/vercel.json`. Public URL = ⬜ you click Deploy (needs accounts + API key).
 
 ## 17. Testing — ✅
 Unit/integration/API/RAG/agent/security tests (pytest). Frontend E2E suite = 🟡 smoke script only (`scripts/e2e_smoke.py`).
 
 ## 18. Documentation — ✅
-README, Install, User, Developer, API (OpenAPI `/docs`), Architecture, Production, **DEMO.md**, Journey, Resume bullets. Screenshots folder ready; capture locally. Demo video = ⬜ record yourself.
+README, Install, User, Developer, API (OpenAPI `/docs`), Architecture, Production, **DEMO.md**, **DEMO_VIDEO.md**, **DEPLOY_CLOUD.md**, Journey, Resume bullets. Screenshots folder ready; capture locally. Demo video = ⬜ record yourself.
 
 ## 19. Portfolio Assets
 
@@ -84,10 +84,11 @@ README, Install, User, Developer, API (OpenAPI `/docs`), Architecture, Productio
 | Architecture diagrams (docs) | ✅ |
 | Resume project description | ✅ `docs/RESUME_BULLETS.md` |
 | Interview / demo script | ✅ `docs/DEMO.md` |
+| Demo video script | ✅ `docs/DEMO_VIDEO.md` (recording = you) |
 | Screenshots | 🟡 folder + guide; capture on your machine |
-| Live public demo URL | ⬜ deploy when ready |
+| Live public demo URL | 🟡 templates ready (`DEPLOY_CLOUD.md`); URL after you deploy |
 | Demo video | ⬜ optional recording |
-| GitHub repository | ⬜ push when you choose |
+| GitHub repository | ✅ https://github.com/devesht0226/ai-workspace |
 
 ---
 
@@ -98,7 +99,7 @@ README, Install, User, Developer, API (OpenAPI `/docs`), Architecture, Productio
 | Full-stack + AI eng + RAG + multi-agent | ✅ |
 | LLM integration + eval/benchmark | ✅ |
 | Backend/frontend/DB/API/security/testing/docs | ✅ |
-| Production-ready architecture | ✅ (local + compose); public hosting ⬜ |
+| Production-ready architecture | ✅ (local + compose + cloud templates) |
 
 ## Verdict
 
@@ -106,4 +107,6 @@ README, Install, User, Developer, API (OpenAPI `/docs`), Architecture, Productio
 
 **Cross-check (2026-07-30):** API `/health` OK · Web :3000 OK · **39 API tests passed** · Web `tsc` clean · secondary nav pages humanized (no raw JSON primary UI).
 
-Do **not** add major features. Next: capture screenshots, rehearse `DEMO.md`, optionally deploy a live URL and record a short video.
+**Portfolio polish (2026-08-05):** CI hardened, cloud deploy guides/templates, CORS for Vercel, demo video script. Remaining manual: screenshots, click Deploy on Vercel/Render, optional video + OpenAI key.
+
+Do **not** add major features. Next: capture screenshots, follow `DEPLOY_CLOUD.md`, rehearse `DEMO.md`.

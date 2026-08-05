@@ -20,11 +20,20 @@ engine: Engine | None = None
 SessionLocal: sessionmaker[Session] | None = None
 
 
+def normalize_database_url(url: str) -> str:
+    """Normalize cloud provider URLs for SQLAlchemy + psycopg."""
+    if url.startswith("postgres://"):
+        return "postgresql+psycopg://" + url.removeprefix("postgres://")
+    if url.startswith("postgresql://") and "+psycopg" not in url:
+        return "postgresql+psycopg://" + url.removeprefix("postgresql://")
+    return url
+
+
 def configure_engine(database_url: str | None = None) -> Engine:
     """Create (or recreate) the global engine and session factory."""
     global engine, SessionLocal
     settings = get_settings()
-    url = database_url or settings.database_url
+    url = normalize_database_url(database_url or settings.database_url)
     kwargs: dict = {}
     if url.startswith("sqlite"):
         kwargs["connect_args"] = {"check_same_thread": False}

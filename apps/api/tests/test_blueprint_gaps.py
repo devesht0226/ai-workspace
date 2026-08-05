@@ -80,7 +80,9 @@ def test_txt_document_upload(client: TestClient, auth_headers: dict[str, str]) -
     upload = client.post(
         "/api/v1/documents",
         headers=auth_headers,
-        files={"file": ("notes.txt", b"RAG retrieves documents for grounded answers.", "text/plain")},
+        files={
+            "file": ("notes.txt", b"RAG retrieves documents for grounded answers.", "text/plain")
+        },
     )
     assert upload.status_code == 201, upload.text
     assert upload.json()["status"] in {"ready", "processing", "failed", "pending"}

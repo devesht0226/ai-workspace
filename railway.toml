@@ -1,0 +1,14 @@
+# Railway — set Root Directory to apps/api (or use Docker)
+# Dashboard: New Project → Deploy from GitHub → select this repo
+# Variables: see docs/DEPLOY_CLOUD.md
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "apps/api/Dockerfile"
+watchPatterns = ["apps/api/**"]
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

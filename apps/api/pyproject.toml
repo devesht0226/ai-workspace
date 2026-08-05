@@ -1,0 +1,9 @@
+# Keep Ruff settings minimal so local and CI stay aligned (pinned in CI to 0.16.0).
+[tool.ruff]
+target-version = "py312"
+src = ["app"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"

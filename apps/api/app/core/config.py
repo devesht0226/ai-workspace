@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     api_prefix: str = "/api/v1"
     cors_origins: str = "http://localhost:3000"
+    # Optional regex for preview/deploy hosts (e.g. https://.*\\.vercel\\.app)
+    cors_origin_regex: str = ""
 
     jwt_secret: str = "change-me-to-a-long-random-string-at-least-32-chars"
     access_token_ttl_seconds: int = 900
@@ -85,6 +87,11 @@ class Settings(BaseSettings):
     @property
     def cors_origins_list(self) -> list[str]:
         origins = [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+        # Always allow the configured app URL (Vercel production domain, etc.)
+        for candidate in (self.app_base_url,):
+            base = (candidate or "").strip().rstrip("/")
+            if base and base not in origins:
+                origins.append(base)
         # Local/dev convenience: browsers often hit 127.0.0.1 or LAN IP instead of localhost
         if self.environment in {"development", "test"}:
             extras = [
@@ -97,6 +104,21 @@ class Settings(BaseSettings):
                 if origin not in origins:
                     origins.append(origin)
         return origins
+
+    @property
+    def resolved_cors_origin_regex(self) -> str | None:
+        explicit = (self.cors_origin_regex or "").strip()
+        if explicit:
+            return explicit
+        if self.environment == "development":
+            return (
+                r"https?://(localhost|127\.0\.0\.1|192\.168\.\d{1,3}\.\d{1,3}|"
+                r"10\.\d{1,3}\.\d{1,3}\.\d{1,3})(:\d+)?"
+            )
+        # Production: allow Vercel preview + production subdomains when using Vercel
+        if "vercel.app" in self.cors_origins or "vercel.app" in (self.app_base_url or ""):
+            return r"https://([\w-]+\.)?vercel\.app"
+        return None
 
 
 @lru_cache
