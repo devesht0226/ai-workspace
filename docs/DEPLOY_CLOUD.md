@@ -18,16 +18,15 @@ Browser → Vercel (Next.js apps/web)
 
 1. Push `main` to GitHub.
 2. [Render](https://render.com) → New → Blueprint → select this repo (`render.yaml`).
-3. Set these env vars when prompted:
-   - `CORS_ORIGINS` = `https://YOUR-APP.vercel.app`
-   - `APP_BASE_URL` = `https://YOUR-APP.vercel.app`
-   - `API_PUBLIC_URL` = `https://YOUR-API.onrender.com`
-   - `OPENAI_API_KEY` = your key (recommended for public demo)
-   - `JWT_SECRET` = long random string (Blueprint can generate)
+3. Set `OPENAI_API_KEY` when prompted (recommended for public demo).
 4. Note the API URL, e.g. `https://ai-workspace-api.onrender.com`.
 5. Open `/health` — should return OK.
 
-**SQLite note:** free Render disks are ephemeral. Prefer the Blueprint Postgres (`DATABASE_URL`).
+The Blueprint uses a **native Python** free web service (not Docker) so free tier works.
+
+**If deploy failed earlier with Docker:** sync the Blueprint again after pulling latest `render.yaml`, or delete the failed web service and re-apply.
+
+**SQLite note:** free Render disks are ephemeral. Prefer the Blueprint Postgres (`DATABASE_URL`). Free Postgres expires after **30 days** unless upgraded.
 
 ### Alternative: Railway
 
